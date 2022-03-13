@@ -18,7 +18,7 @@ def main():
     p = soup.find_all(class_='parkhaus')
     valueFinder = re.compile('[0-9]+')
     ps = []
-    ps.append({"date":datetime.date.today().month})
+    ps.append({"date":datetime.date.today().isoformat()})
     for parkhaus in p:
         try:
             totalCap = valueFinder.findall(parkhaus.text)
