@@ -41,9 +41,9 @@ def main():
 
     with open('../maxomnia.github.io/data.json', 'w') as f:
                 f.write(json.dumps(data))
-    #command = 'cd ../maxomnia.github.io & git add * & git commit -m "Automated Commit" & git push'
-    #result= subprocess.run(command, stdout=subprocess.PIPE, shell=True)
-    #print(result.stdout.decode())
+    command = 'cd ../maxomnia.github.io & git add * & git commit -m "Automated Commit" & git push'
+    result= subprocess.run(command, stdout=subprocess.PIPE, shell=True)
+    print(result.stdout.decode())
 
 if(__name__ == "__main__"):
     main()
