@@ -17,8 +17,8 @@ def main():
     soup = BeautifulSoup(page.content, "html.parser")
     p = soup.find_all(class_='parkhaus')
     valueFinder = re.compile('[0-9]+')
+    data = {"date":datetime.date.today().isoformat()}
     ps = []
-    ps.append({"date":datetime.date.today().isoformat()})
     for parkhaus in p:
         try:
             totalCap = valueFinder.findall(parkhaus.text)
@@ -37,12 +37,13 @@ def main():
                 #print(f"{name}: N/A")
         except:
             print("Something went wrong while read the HTML")
+    data['data'] = ps
 
     with open('../maxomnia.github.io/data.json', 'w') as f:
-                f.write(json.dumps(ps))
-    command = 'cd ../maxomnia.github.io & git add * & git commit -m "Automated Commit" & git push'
-    result= subprocess.run(command, stdout=subprocess.PIPE, shell=True)
-    print(result.stdout.decode())
+                f.write(json.dumps(data))
+    #command = 'cd ../maxomnia.github.io & git add * & git commit -m "Automated Commit" & git push'
+    #result= subprocess.run(command, stdout=subprocess.PIPE, shell=True)
+    #print(result.stdout.decode())
 
 if(__name__ == "__main__"):
     main()
