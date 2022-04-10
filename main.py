@@ -20,25 +20,26 @@ def main():
     data = {"date":datetime.date.today().isoformat()}
     ps = []
     for parkhaus in p:
+        name = parkhaus.find('a').text.strip()
         try:
             totalCap = valueFinder.findall(parkhaus.text)
             totalCap = totalCap[len(totalCap) - 1]
             occupied = parkhaus.find(class_='fuellstand')
-            name = parkhaus.find('a').text.strip()
-            if occupied is not None:
+            if occupied is not None and name is not None:
                 v = valueFinder.search(occupied.text).group()
                 v = int(v)
                 totalCap = int(totalCap)
                 park = ParkingLot(name, v, totalCap)
                 ps.append(park.__dict__)
-                #(f"{name}: {v}/{totalCap} {round((v/totalCap)*100)}%")
-            else:
-                ps.append(ParkingLot(name, -1, -1).__dict__)
-                #print(f"{name}: N/A")
         except:
-            print("Something went wrong while read the HTML")
+            print("Something went wrong while reading the HTML")
+            try:
+                closed = parkhaus.find(class_='geschlossen')
+                if closed is not None:
+                    ps.append(ParkingLot(name, "Closed", "Closed").__dict__)
+            except:
+                ps.append(ParkingLot(name, "No data", "No data").__dict__)
     data['data'] = ps
-
     with open('../maxomnia.github.io/data.json', 'w') as f:
                 f.write(json.dumps(data))
     command = 'cd ../maxomnia.github.io & git add * & git commit -m "Automated Commit" & git push'
